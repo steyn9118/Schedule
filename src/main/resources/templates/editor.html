@@ -81,7 +81,7 @@
                             <label class="form-label" for="subject_name">Наименование предмета:</label>
                           </div>
                           <div class="col-auto">
-                            <input class="form-control" type="text" id="subject_name" name="name" required>
+                            <input class="form-control" type="text" id="subject_name" name="name" th:value="${subject.name}" required>
                           </div>
                         </div>
                       </div>
@@ -120,7 +120,7 @@
                             <label class="form-label" for="fio">ФИО:</label>
                           </div>
                           <div class="col-auto">
-                            <input class="form-control" type="text" id="fio" name="fio" required>
+                            <input class="form-control" type="text" id="fio" name="fio" th:value="${professor.fio}" required>
                           </div>
                         </div>
                       </div>
@@ -159,7 +159,7 @@
                             <label class="form-label" for="room_name">Номер аудитории:</label>
                           </div>
                           <div class="col-auto">
-                            <input class="form-control" type="text" id="room_name" name="name" required>
+                            <input class="form-control" type="text" id="room_name" name="name" th:value="${room.name}" required>
                           </div>
                         </div>
                         <div class="row g-3 align-items-center">
@@ -167,13 +167,13 @@
                             <label class="form-label" for="audience_limit">Вместимость:</label>
                           </div>
                           <div class="col-auto">
-                            <input class="form-control" type="number" id="audience_limit" name="audienceLimit" required>
+                            <input class="form-control" type="number" id="audience_limit" name="audienceLimit" th:value="${room.audienceLimit}" required>
                           </div>
                         </div>
                         <div class="row g-3 align-items-center">
                           <div class="col-auto">
                             <div class="form-check">
-                              <input class="form-check-input" type="checkbox" value="1" name="available" id="availableCheckbox">
+                              <input class="form-check-input" type="checkbox" value="1" name="available" th:value="${room.isAvailable}" id="availableCheckbox">
                               <label class="form-check-label" for="availableCheckbox">Доступность</label>
                             </div>
                           </div>
@@ -214,7 +214,7 @@
                             <label for="dateTime">Дата и время начала:</label><br/>
                           </div>
                           <div class="col-auto">
-                            <input type="datetime-local" id="dateTime" name="dateTime" required>
+                            <input type="datetime-local" id="dateTime" name="dateTime" th:value="${lesson.dateTime}" required>
                           </div>
                         </div>
                         <div class="row g-3 align-items-center">
@@ -224,7 +224,8 @@
                           <div class="col-auto">
                             <select class="form-select" id="professor_id" name="professorId" required>
                               <th:block th:each="professor : ${professors}">
-                                <option th:value="${professor.id}" th:text="${professor.fio}"></option>
+                                <option selected th:if="${professor.id == lesson.professor.id}" th:value="${professor.id}" th:text="${professor.fio}"></option>
+                                <option th:if="${not (professor.id == lesson.professor.id)}" th:value="${professor.id}" th:text="${professor.fio}"></option>
                               </th:block>
                             </select>
                           </div>
@@ -236,7 +237,8 @@
                           <div class="col-auto">
                             <select class="form-select" id="room_id" name="roomId" required>
                               <th:block th:each="room : ${rooms}">
-                                <option th:value="${room.id}" th:text="${room.name}"></option>
+                                <option selected th:if="${room.id == lesson.room.id}" th:value="${room.id}" th:text="${room.name}"></option>
+                                <option th:if="${not (room.id == lesson.room.id)}" th:value="${room.id}" th:text="${room.name}"></option>
                               </th:block>
                             </select>
                           </div>
@@ -248,7 +250,8 @@
                           <div class="col-auto">
                             <select class="form-select" id="subject_id" name="subjectId" required>
                               <th:block th:each="subject : ${subjects}">
-                                <option th:value="${subject.id}" th:text="${subject.name}"></option>
+                                <option selected th:if="${subject.id == lesson.subject.id}" th:value="${subject.id}" th:text="${subject.name}"></option>
+                                <option th:if="${not (subject.id == lesson.subject.id)}" th:value="${subject.id}" th:text="${subject.name}"></option>
                               </th:block>
                             </select>
                           </div>
@@ -260,7 +263,8 @@
                           <div class="col-auto">
                             <select class="form-select" id="group_id" name="groupId" required>
                               <th:block th:each="group : ${groups}">
-                                <option th:value="${group.id}" th:text="${group.name}"></option>
+                                <option selected th:if="${group.id == lesson.group.id}" th:value="${group.id}" th:text="${group.name}"></option>
+                                <option th:if="${not (group.id == lesson.group.id)}" th:value="${group.id}" th:text="${group.name}"></option>
                               </th:block>
                             </select>
                           </div>
