@@ -18,7 +18,18 @@
 </header>
 
 <div class="container-md text-center">
-    <h2 th:text="'Расписание преподавателя ' + ${professor.fio}"></h2>
+    <div class="row">
+        <div class="col">
+            <header class="d-flex justify-content-center py-3">
+                <ul class="nav nav-pills">
+                    <li class="nav-item"><a th:href="'/schedule/professor/' + ${professor.id} +'/' + ${offset - 1}" class="nav-link">Пред. неделя</a></li>
+                    <li><h2 th:text="'Расписание преподавателя ' + ${professor.fio}"></h2></li>
+                    <li class="nav-item"><a th:href="'/schedule/professor/' + ${professor.id} +'/' + ${offset + 1}" class="nav-link">След. неделя</a></li>
+                </ul>
+            </header>
+        </div>
+    </div>
+
     <div class="row">
         <div class="col">
             <div class="card border-primary mb-3">
@@ -31,7 +42,7 @@
                         <div class="card-body">
                             <h6 class="card-subtitle" th:text="${lesson.getTime}"></h6>
                             <p class="card-text" th:text="${lesson.room.name} + ' ' + ${lesson.subject.name}"></p>
-                            <a th:href="'/schedule/group/' + ${lesson.group.id}" class="card-link" th:text="${lesson.group.name}"></a>
+                            <a th:href="'/schedule/group/' + ${lesson.group.id} + '/' + ${offset}" class="card-link" th:text="${lesson.group.name}"></a>
                         </div>
                     </div>
                 </th:block>
@@ -48,7 +59,7 @@
                         <div class="card-body">
                             <h6 class="card-subtitle" th:text="${lesson.getTime}"></h6>
                             <p class="card-text" th:text="${lesson.room.name} + ' ' + ${lesson.subject.name}"></p>
-                            <a th:href="'/schedule/group/' + ${lesson.group.id}" class="card-link" th:text="${lesson.group.name}"></a>
+                            <a th:href="'/schedule/group/' + ${lesson.group.id} + '/' + ${offset}" class="card-link" th:text="${lesson.group.name}"></a>
                         </div>
                     </div>
                 </th:block>
@@ -65,7 +76,7 @@
                         <div class="card-body">
                             <h6 class="card-subtitle" th:text="${lesson.getTime}"></h6>
                             <p class="card-text" th:text="${lesson.room.name} + ' ' + ${lesson.subject.name}"></p>
-                            <a th:href="'/schedule/group/' + ${lesson.group.id}" class="card-link" th:text="${lesson.group.name}"></a>
+                            <a th:href="'/schedule/group/' + ${lesson.group.id} + '/' + ${offset}" class="card-link" th:text="${lesson.group.name}"></a>
                         </div>
                     </div>
                 </th:block>
@@ -82,7 +93,7 @@
                         <div class="card-body">
                             <h6 class="card-subtitle" th:text="${lesson.getTime}"></h6>
                             <p class="card-text" th:text="${lesson.room.name} + ' ' + ${lesson.subject.name}"></p>
-                            <a th:href="'/schedule/group/' + ${lesson.group.id}" class="card-link" th:text="${lesson.group.name}"></a>
+                            <a th:href="'/schedule/group/' + ${lesson.group.id} + '/' + ${offset}" class="card-link" th:text="${lesson.group.name}"></a>
                         </div>
                     </div>
                 </th:block>
@@ -99,7 +110,7 @@
                         <div class="card-body">
                             <h6 class="card-subtitle" th:text="${lesson.getTime}"></h6>
                             <p class="card-text" th:text="${lesson.room.name} + ' ' + ${lesson.subject.name}"></p>
-                            <a th:href="'/schedule/group/' + ${lesson.group.id}" class="card-link" th:text="${lesson.group.name}"></a>
+                            <a th:href="'/schedule/group/' + ${lesson.group.id} + '/' + ${offset}" class="card-link" th:text="${lesson.group.name}"></a>
                         </div>
                     </div>
                 </th:block>
@@ -116,7 +127,7 @@
                         <div class="card-body">
                             <h6 class="card-subtitle" th:text="${lesson.getTime}"></h6>
                             <p class="card-text" th:text="${lesson.room.name} + ' ' + ${lesson.subject.name}"></p>
-                            <a th:href="'/schedule/group/' + ${lesson.group.id}" class="card-link" th:text="${lesson.group.name}"></a>
+                            <a th:href="'/schedule/group/' + ${lesson.group.id} + '/' + ${offset}" class="card-link" th:text="${lesson.group.name}"></a>
                         </div>
                     </div>
                 </th:block>

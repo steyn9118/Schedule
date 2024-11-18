@@ -14,9 +14,7 @@ import java.time.DayOfWeek;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.StreamSupport;
 
 @org.springframework.stereotype.Controller
@@ -40,51 +38,47 @@ public class Controller {
 
     // GET
 
-    @PostMapping("/")
+    @GetMapping("/")
     public String getHome() {
         return "home";
     }
 
-    @GetMapping("/schedule/group/{id}")
-    public String getScheduleByGroup(@PathVariable(value = "id") Integer id, Model model) {
+    @GetMapping("/schedule/group/{id}/{week}")
+    public String getScheduleByGroup(@PathVariable(value = "id") Integer id, @PathVariable(value = "week") Integer weekOffset,  Model model) {
         Iterable<Lesson> lessons = StreamSupport.stream(lessonsRepo.findAll().spliterator(), false).filter(lesson -> {
             return lesson.getGroup().getId() == id;
         }).toList();
 
         int i = 1;
-        for (LocalDate day : getDaysOfTheWeek()){
-            List<Lesson> currentDayLessons = new ArrayList<>();
-            currentDayLessons.addAll(StreamSupport.stream(lessons.spliterator(), false).filter(lesson -> {
-                return lesson.getDateTime().getDayOfWeek().equals(day.getDayOfWeek());
-            }).toList());
+        for (LocalDate day : getDaysOfTheWeek(weekOffset)){
+            List<Lesson> currentDayLessons = new ArrayList<>(StreamSupport.stream(lessons.spliterator(), false).filter(lesson -> lesson.getDateTime().toLocalDate().equals(day)).toList());
             model.addAttribute("lessons" + i, currentDayLessons);
             model.addAttribute("date" + i, day.toString());
             i++;
         }
 
         model.addAttribute("group", groupsRepo.findById(id).orElseThrow());
+        model.addAttribute("offset", weekOffset);
 
         return "group_schedule";
     }
 
-    @GetMapping("/schedule/professor/{id}")
-    public String getScheduleByProfessor(@PathVariable(value = "id") Integer id, Model model) {
+    @GetMapping("/schedule/professor/{id}/{week}")
+    public String getScheduleByProfessor(@PathVariable(value = "id") Integer id, @PathVariable(value = "week") Integer weekOffset, Model model) {
         Iterable<Lesson> lessons = StreamSupport.stream(lessonsRepo.findAll().spliterator(), false).filter(lesson -> {
             return lesson.getProfessor().getId() == id;
         }).toList();
 
         int i = 1;
-        for (LocalDate day : getDaysOfTheWeek()){
-            List<Lesson> currentDayLessons = new ArrayList<>();
-            currentDayLessons.addAll(StreamSupport.stream(lessons.spliterator(), false).filter(lesson -> {
-                return lesson.getDateTime().getDayOfWeek().equals(day.getDayOfWeek());
-            }).toList());
+        for (LocalDate day : getDaysOfTheWeek(weekOffset)){
+            List<Lesson> currentDayLessons = new ArrayList<>(StreamSupport.stream(lessons.spliterator(), false).filter(lesson -> lesson.getDateTime().toLocalDate().equals(day)).toList());
             model.addAttribute("lessons" + i, currentDayLessons);
             model.addAttribute("date" + i, day.toString());
             i++;
         }
 
         model.addAttribute("professor", professorsRepo.findById(id).orElseThrow());
+        model.addAttribute("offset", weekOffset);
 
         return "professor_schedule";
     }
@@ -275,10 +269,13 @@ public class Controller {
 
     // Utils
 
-    private List<LocalDate> getDaysOfTheWeek(){
+    private List<LocalDate> getDaysOfTheWeek(Integer offset){
         LocalDate today = LocalDate.now();
         LocalDate monday = today.with(DayOfWeek.MONDAY);
         List<LocalDate> weekDays = new ArrayList<>();
+
+        if (offset>0) monday = monday.plusWeeks(offset);
+        if (offset<0) monday = monday.minusWeeks(Math.abs(offset));
 
         for (int i = 0; i < 6; i++) {
             weekDays.add(monday.plusDays(i));
